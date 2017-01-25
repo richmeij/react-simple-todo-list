@@ -1,0 +1,172 @@
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
+        <style>
+              body { margin: 0; padding: 0; height: 100%; background-color: #eee; font-size: 2em; font-family: arial }
+            .app { padding-top: 32px; text-align: center; }
+            .todo-list { display: inline-block; width: 400px;  margin: 0; padding: 0; list-style: inside none; }
+            .todo { background-color: #fff; padding: 8px; text-align: left; border-bottom: 1px solid #eee; }
+            .todo:hover { cursor: pointer; background-color: #eef; }
+            .todo.done { text-decoration: line-through; color: #aaa;  }
+            .all-done { color: #73a83d; height:54px; }
+            form { display: block; padding: 0; margin: 32px 0; }
+            input { margin: 0; width: 250px; padding: 8px; font-size: 1em;  }
+            input[type="submit"] { margin-left: 8px; padding: 8px; font-size: 1em; width: 150px;   background-color: #33f; color: #fff; border: none; cursor: pointer; border-radius: 4px }
+        </style>
+    </head>
+
+    <body>
+        <div id="app"></div>
+         
+        <script type="text/babel">
+
+            // App Container Component with state
+            class App extends React.Component {
+                state = {
+                    todos: [{
+                        id: 1,
+                        title: 'Meetup promoten',
+                        done: true
+                    }, {
+                        id: 2,
+                        title: 'Koffie zetten',
+                        done: false
+                    }, {
+                        id: 3,
+                        title: 'Presentatie maken',
+                        done: false
+                    }]                   
+                }
+
+                addTodo = (newTodoTitle) => {
+                    this.setState({
+                        todos: [
+                            ...this.state.todos,
+                            {
+                                id: Date.now(),
+                                title: newTodoTitle,
+                                done: false
+                            }
+                        ]
+                    });
+                }
+
+                toggleTodo = (id) => {
+                    const newTodos = this.state.todos.map(todo => {
+                        return {
+                            ...todo,
+                            done: todo.id === id ? !todo.done : todo.done 
+                        }
+                    });
+                    this.setState({
+                        todos: newTodos.some(t => !t.done) ? newTodos : []
+                    });
+                }
+
+                renderTodoList(todos) {
+                    const todosLeft = todos.some(t => !t.done);
+                    if (todosLeft) {
+                        return <TodoList todos={todos} toggleTodo={this.toggleTodo} />;
+                    } else {
+                        return <AllDone />;
+                    }
+                }
+
+                render() {
+                    const { todos } = this.state;
+                    return (
+                        <div className="app">
+                            <Header>To-Do list</Header>
+                            { this.renderTodoList(todos) }
+                            <TodoForm addTodo={this.addTodo} />
+                        </div>
+                    );
+                }
+            }
+
+            // Simple header component
+            const Header = ({ children }) => <h1>{ children }</h1>;
+
+            // Simple all-done component
+            const AllDone = () => <div className="all-done">All done!</div>;
+
+            // Input form to facilitate adding a new todo
+            class TodoForm extends React.Component {
+                state = { 
+                    newTodoTitle: ''
+                }
+
+                handleChange = (e) => {
+                    this.setState({
+                        newTodoTitle: e.target.value
+                    });
+                }
+
+                handleSubmit = (e) => {
+                    e.preventDefault();
+                    const { newTodoTitle } = this.state;
+                    if (newTodoTitle) {
+                        this.props.addTodo(newTodoTitle);
+                    }
+                    this.setState({
+                        newTodoTitle: ''
+                    });
+                }
+
+                render() {
+                    return (
+                        <form onSubmit={this.handleSubmit}>
+                            <input type="text" value={this.state.newTodoTitle} onChange={this.handleChange} />
+                            <input type="submit" value="Add" />
+                        </form>
+                    );
+                }
+            }
+
+            // Todolist component
+            const TodoList = ({ todos, ...props }) => {
+                return (
+                    <ul className="todo-list">
+                        { todos
+                            .sort(sortTodo)
+                            .map(todo => <Todo {...todo} {...props} />)
+                        }
+                    </ul>
+                );
+            }
+
+            // Todo component
+            class Todo extends React.Component {
+
+                handleClick = (e) => {
+                    const { toggleTodo, id } = this.props;
+                    toggleTodo(id);
+                }
+
+                render() {
+                    const { title, done } = this.props;
+                    const classNames = `todo ${done ? ' done' : ''}`;
+                    return (
+                        <li className={classNames} onClick={this.handleClick}>{ title }</li>
+                    );
+                }
+            }
+
+            // ENTRYPOINT: Mount App component in DOM
+            const rootNode = document.getElementById('app');
+            ReactDOM.render(<App />, rootNode);
+
+            // Helper function to sort todos
+            function sortTodo(t1, t2) {
+                return (
+                    t1.done === t2.done 
+                        ? t1.id - t2.id
+                        : t1.done
+                            ? 1
+                            : -1);
+            }
+        </script>
+    </body>
+</html>
