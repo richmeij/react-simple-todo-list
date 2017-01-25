@@ -8,6 +8,7 @@ the first [Webdev Zwolle meetup](https://www.meetup.com/webdevzwolle/).
 The goal of this coding session was to 
 * Illustrate how React works in general
 * Show off JSX
+* Show off a bit of ES6 magic
 * show different ways to declare components
 * Show how to manage state
 * Show how to communicate between component through props
