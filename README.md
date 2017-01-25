@@ -1,7 +1,7 @@
 # Whats this?
 
-This is a simple To-Do List made with React. It served as a live coding example during
-the first [Webdev Zwolle meetup](https://www.meetup.com/webdevzwolle/).
+This is a simple To-Do List made with React.  
+It served as a live coding example during the first [Webdev Zwolle meetup](https://www.meetup.com/webdevzwolle/).
 
 # Goal
 
