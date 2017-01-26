@@ -138,20 +138,11 @@
             }
 
             // Todo component
-            class Todo extends React.Component {
-
-                handleClick = (e) => {
-                    const { toggleTodo, id } = this.props;
-                    toggleTodo(id);
-                }
-
-                render() {
-                    const { title, done } = this.props;
-                    const classNames = `todo ${done ? ' done' : ''}`;
-                    return (
-                        <li className={classNames} onClick={this.handleClick}>{ title }</li>
-                    );
-                }
+            const Todo = ({ id, title, done, toggleTodo }) => {
+                const classNames = `todo ${done ? ' done' : ''}`;
+                return (
+                    <li className={classNames} onClick={() => toggleTodo(id)}>{ title }</li>
+                );
             }
 
             // ENTRYPOINT: Mount App component in DOM
