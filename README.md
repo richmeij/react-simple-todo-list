@@ -13,6 +13,9 @@ The goal of this coding session was to
 * Show how to manage state
 * Show how to communicate between component through props
 
+# How to run?
+Just open `todolist.html` in a browser.
+
 # Presentational slides
 Slides for the presentation can be found [here](https://docs.google.com/presentation/d/1ybzfPoARdRD9juvqrJP1E2cL9fBmphPgqsf8cOWcfQc/pub?start=false&loop=false&delayms=3000)
 (Partly in dutch)
